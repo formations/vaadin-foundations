@@ -1,0 +1,367 @@
+= Les fondations de Vaadin
+
+:imagesdir: ./images/course
+
+== Pourquoi Vaadin ?
+
+La solution standard pour faire du web avec Java est Java EE
+
+=== Le Web avec Java EE
+
+|===
+
+| HTTP | Java
+| HTML | API Servlet
+| CSS | JSP
+| JavaScript | Taglibs/Tag files
+| AJAX 
+| DOM
+
+|===
+
+=== Le Web avec Vaadin
+
+[options="header",cols="2*"]
+|===
+ 
+| Obligatoire 
+| Facultatif
+
+| Java
+| Vaadin
+
+| SASS
+| GWT
+
+|===
+
+=== Quelques principes
+
+* Le code est en Java
+** Compilé en bytecode
+* Basé sur des composants
+* Programmation évènementielle
+
+=== Contraintes
+
+* Java 8+
+* Container de servlets Java EE 6+
+
+=== Architecture générale
+
+image::architecture.png[]
+
+== Composants
+
+Interface de plus haut niveau implémentée par tous les composants Vaadin
+
+=== UI
+
+* Représente l’intégralité d’une fenêtre de navigateur
+* Une instance par fenêtre (ou tab)
+* UI utilisée spécifiée par un paramètre de servlet
+
+=== Appel d'UI.init()
+
+* Au chargement de la page
+* A chaque refresh
+** Sauf si l’`UI` est annotée avec `@PreserveOnRefresh`
+
+=== !
+
+[.stretch]
+image::ui.svg[]
+
+=== Notion de composant
+
+Disposés sur leur container parent via un layout
+
+=== !
+
+[.stretch]
+image::component.svg[]
+
+=== Composants disponibles
+
+* `Label`
+* `TextField`
+* `Button`
+* `Select`
+* `Grid`
+* etc.
+
+=== Samplers
+
+* http://demo.vaadin.com/sampler/[Dernière version^]
+* http://demo.vaadin.com/sampler-for-vaadin6[Version 6^]
+
+=== !
+
+image::sampler6.png[]
+
+=== Containers et layouts
+
+Container : ::
+Comprend un ou des composants enfants
+Layout : ::
+Container spécialisé qui dispose ses composants enfant selon une stratégie
+
+=== !
+
+[.stretch]
+image::layout.svg[]
+
+=== Layouts disponibles
+
+* `VerticalLayout`
+* `HorizontalLayout`
+* `GridLayout`
+* `FormLayout`
+* etc.
+
+== Programmation Evènementielle
+
+* Implémentation du pattern `Observer`
+* Présent dans tous les clients lourds :
+** Swing/AWT
+** SWT
+** Flex
+* Mais pas dans le web
+
+=== !
+
+image::observer.svg[]
+
+=== Qui est Subject ?
+
+* Tous les `Component` sont des `Subject`
+* Génèrent des évènements en fonction :
+** Du type de composant
+** Du type de déclencheur
+
+=== Exemple
+
+* `Button` génère :
+** `FocusEvent`
+** `BlurEvent`
+** `ClickEvent`
+
+=== Qui est Observer ?
+
+* Toute classe peut implémenter `Observer`
+** _p.e._ l'UI
+
+=== Côté client
+
+* Ne pas s'en préocupper
+* Du JavaScript implémente le code serveur
+* Une interaction client-serveur se traduit par un appel Ajax
+
+=== Composant immédiat
+
+* Un composant immédiat envoie l’événement _immédiatement_ au serveur
+* Un composant non-immédiat le stocke dans un tampon
+* Evènements du tampon envoyés lors du prochain événement immédiat
+
+=== Architecture des abonnés
+
+* Notion d’abonnement portée par une interface
+* N'importe laquelle :
+** L’UI
+** Une classe anonyme
+** Une classe dédiée
+
+=== UI abonné
+
+Avantages::
+Tous les évènements sont traités dans une unique classe
+Désavantages::
+Si plusieurs objets génèrent le même événement, il faut pouvoir les différencier via des `if`
+
+=== !
+
+[source,java]
+----
+public class MyUI implements ClickListener {
+
+  private Button button1;
+  private Button button2;
+
+  @Override
+  public void buttonClick(ClickEvent e) {
+
+    if (e.getSource() == button1) ...
+    else if (e.getSource() == button2) ...
+  }
+}
+----
+
+=== Classe anonyme abonnée
+
+Avantages::
+Porte l’information du comportement avec sa déclaration
+Désavantages::
+* Perte de la référence sur le comportement
+* Couplage fort
+
+=== !
+
+[source,java]
+----
+button.addClickListener(new ClickListener() {
+
+  @Override
+  public void buttonClick(ClickEvent e) {
+    ...
+  }
+}
+----
+
+=== Classe dédiée abonnée
+
+Avantages::
+* Entièrement orienté objet
+* Lisible
+* Changement dynamique possible
+* Séparation des responsabilités
+* Nommage sémantique
+Désavantage::
+Verbeux
+
+=== !
+
+[source,java]
+----
+public class SendFormBehavior implements ClickListener() {
+
+  @Override
+  public void buttonClick(ClickEvent e) {
+    ...
+  }
+}  
+----
+
+== Erreurs
+
+image::error.svg[]
+
+=== Mettre un composant en erreur
+
+`c.setComponentError(ErrorMessage)`
+
+=== Exceptions inattendues
+
+image::error-handler.svg[]
+
+=== Notifications
+
+[.stretch]
+image::notification.svg[]
+
+=== !
+
+image:notification-human.png[Humanized message,477,119]
+image:notification-error.png[Error message,363,121]
+image:notification-tray.png[Tray message,284,121]
+image:notification-warning.png[Warning message,467,119]
+
+=== Comment valider ?
+
+image::validatable.svg[]
+
+=== Validateurs disponibles
+
+* XXXRangeValidator :
+** `Date`, `Double` & `Integer`
+* `RegexpValidator`
+* `EmailValidator`
+* `StringLengthValidator`
+* `NullValidator`
+* `CompositeValidator`
+
+=== Exemple d’utilisation d’un Validator
+
+[source,java]
+----
+TextField email = TextField(”Email");
+email.addValidator(new EmailValidator());
+----
+
+== Data Binding
+
+* Gestion évènementielle du changement d’état du modèle vers un composant graphique
+* Et vice-versa
+
+=== Niveaux de data binding
+
+* Propriété _p.e._ `email`
+* Bean _p.e_ `Person`
+* Liste de beans
+
+=== Has Value
+
+[quote, Vaadin Javadocs, https://vaadin.com/api/8.1.4/com/vaadin/data/HasValue.html]
+A generic interface for field components and other user interface objects that have a user-editable value.
+
+=== !
+
+[.stretch]
+image::hasvalue.svg[]
+
+=== Binder
+
+[quote, Vaadin documentation, https://vaadin.com/docs/framework/v8/datamodel/datamodel-forms.html]
+Defines how the values in a business object should be bound to the fields shown in the user interface. Binder takes care of reading values from the BO and converting the user’s data between the format expected by the BO and the format expected by the field.
+
+=== !
+
+image::binder.svg[]
+
+=== Exemple
+
+[source,java]
+----
+Binder<Person> binder = new Binder<>(Person.class);
+TextField firstNameField = new TextField("Give name");
+TextField lastNameField = new TextField("Family name");
+DateField birthDateField = new DateField("Date of birth");
+binder.bind(firstNameField, "firstName");
+binder.bind(lastNameField, "lastName");
+binder.bind(birthDateField, "birthDate");
+
+// User interaction
+
+Person person = binder.getBean();
+String firstName = person.getFirstName();
+String lastName = person.getLastName();
+Date birthdate = person.getBirthDate();
+----
+
+=== !
+
+image::form.png[Exemple de formulaire,588,296]
+
+=== Has Items
+
+[quote, Vaadin Javadocs, https://vaadin.com/api/8.1.4/com/vaadin/data/HasItems.html]
+A component that displays a collection of items.
+
+=== !
+
+image::hasitems.svg[]
+
+=== Exemple
+
+[source,java]
+----
+List<Person> persons = ...;
+ListDataProvider<Person> provider = new ListDataProvider<>(persons);
+Grid<Person> grid = new Grid<>(Person.class);
+grid.setDataProvider(provider);
+grid.setHeaderVisible(true);
+grid.setColumns("firstName", "lastName", "birthDate");
+----
+
+=== !
+
+image::grid.png[Exemple de Grid,750,600]

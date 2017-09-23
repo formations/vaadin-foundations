@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="161px" preserveAspectRatio="none" style="width:224px;height:161px;" version="1.1" viewBox="0 0 224 161" width="224px" zoomAndPan="magnify"><defs><filter height="300%" id="fewvq53laesb5" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class Component--><rect fill="#FEFECE" filter="url(#fewvq53laesb5)" height="142.4375" id="Component" style="stroke: #A80036; stroke-width: 1.5;" width="207" x="6" y="8"/><ellipse cx="69.25" cy="24" fill="#B4A7E5" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M70.2031,20.7813 L70.2031,27.2969 L71.9219,27.2969 C72.375,27.2969 72.5156,27.3281 72.6875,27.4531 C72.9219,27.625 73.0313,27.875 73.0313,28.1563 C73.0313,28.7188 72.6719,29 71.9219,29 L66.7813,29 C66.375,29 66.1719,28.9531 66.0156,28.8281 C65.7969,28.6719 65.6563,28.4063 65.6563,28.1563 C65.6563,27.8594 65.8125,27.5781 66.0625,27.4219 C66.2188,27.3125 66.3438,27.2969 66.7813,27.2969 L68.5,27.2969 L68.5,20.7813 L66.7813,20.7813 C66.3594,20.7813 66.1719,20.75 66.0156,20.6406 C65.7969,20.4688 65.6563,20.2188 65.6563,19.9375 C65.6563,19.6563 65.8125,19.3594 66.0625,19.2031 C66.2188,19.1094 66.3438,19.0938 66.7813,19.0938 L71.9219,19.0938 C72.375,19.0938 72.5156,19.125 72.6875,19.2344 C72.9219,19.4063 73.0313,19.6719 73.0313,19.9375 C73.0313,20.2344 72.8906,20.5156 72.625,20.6719 C72.5,20.75 72.3125,20.7813 71.9219,20.7813 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="72" x="89.75" y="28.1543">Component</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="212" y1="40" y2="40"/><ellipse cx="17" cy="51.9023" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="132" x="26" y="54.2104">getParent():Component</text><ellipse cx="17" cy="64.707" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="52" x="26" y="67.0151">getUI():UI</text><ellipse cx="17" cy="77.5117" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="111" x="26" y="79.8198">isEnabled():boolean</text><ellipse cx="17" cy="90.3164" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="121" x="26" y="92.6245">isReadOnly():boolean</text><ellipse cx="17" cy="103.1211" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="103" x="26" y="105.4292">isVisible():boolean</text><ellipse cx="17" cy="115.9258" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="164" x="26" y="118.2339">setEnabled(enabled:boolean)</text><ellipse cx="17" cy="128.7305" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="181" x="26" y="131.0386">setReadOnly(readOnly:boolean)</text><ellipse cx="17" cy="141.5352" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="147" x="26" y="143.8433">setVisible(visible:boolean)</text><!--
+@startuml
+interface Component {
+ + {abstract} getParent():Component
+ + {abstract} getUI():UI
+ + {abstract} isEnabled():boolean
+ + {abstract} isReadOnly():boolean
+ + {abstract} isVisible():boolean
+ + {abstract} setEnabled(enabled:boolean)
+ + {abstract} setReadOnly(readOnly:boolean)
+ + {abstract} setVisible(visible:boolean)
+}
+
+
+hide empty attributes
+hide empty methods
+@enduml
+
+PlantUML version 1.2017.16(Sun Sep 03 10:53:37 UTC 2017)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.7.0_25-b15
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

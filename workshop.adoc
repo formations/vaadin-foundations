@@ -1,0 +1,18 @@
+= Travaux pratiques - Fondations de Vaadin 
+Nicolas Frankel
+:doctype: article
+:encoding: utf-8
+:lang: fr
+:toc:
+:toc-title: Table des matières
+:toc-placement!:
+:sectanchors:
+:numbered:
+:experimental:
+:icons: font
+:imagesdir: ./images/workshop
+:toc:
+
+include::license.adoc[]
+
+
