@@ -1,6 +1,6 @@
 = Les fondations de Vaadin
 
-:imagesdir: ./images/course
+:imagesdir: ./images
 
 == Pourquoi Vaadin ?
 
