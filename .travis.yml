@@ -12,7 +12,7 @@ script:
   - bundle exec asciidoctor -D output workshop.adoc
 
 after_success:      
-  - cd output ; mv README.html index.html ; cp -R ../images . ; cp ../style.css .
+  - cd output ; mv README.html index.html ; cp -R ../images .
   - git init
   - git config user.name "${GH_USER_NAME}"
   - git config user.email "{GH_USER_EMAIL}"
