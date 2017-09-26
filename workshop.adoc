@@ -15,10 +15,82 @@ Nicolas Frankel
 
 include::license.adoc[]
 
-== Pré-requis
+toc::[]
 
-== Démarrage
+== Installation du _plugin_ dans l'IDE
 
-== Composants, mises en page & évènements
+// TODO
 
-== Validation & _binding_
+== Exploration
+
+// TODO
+
+== Exploration des composants
+
+* Créer un projet Vaadin _vaadin-components_
+* A l’aide du sampler, ajouter des composants :
+** `Label`
+** `TextField`
+** `DateField`
+** `Grid`
+** `Table`
+** `Button`
+* A quoi correspond le premier argument du constructeur ?
+* A l’aide du navigateur, identifier les composants HTML correspondants
+
+== Exploration des _layouts_
+
+* En conservant le même projet, changer de layout :
+** `VerticalLayout`
+** `HorizontalLayout`
+** `FormLayout`
+* Qu’observez-vous ?
+* A l’aide du navigateur, identifier les composants HTML correspondants
+
+== Création de formulaire 
+
+* Créer un projet Vaadin _vaadin-form_
+* Créer le formulaire suivant :
++
+[options="header"]
+|===
+| Libellé | Type de données
+| Nom | Chaîne de caractères
+| Prénom | Chaîne de caractères
+| Date de Naissance | Date
+| Nationalité | Liste multi-valuée
+| Commune d’Origine | Chaîne de Caractères
+| S’enregistrer | Bouton
+|===
+
+== Envoi du formulaire
+
+Récupérer les valeurs des champs du formulaire côté serveur avec `myComponent.getValue()`
+
+== Gestion de l'envoi des évènements côté serveur
+
+* Valider les champs de deux manières différentes en modifiant l’immédiateté des champs :
+. A la soumission du formulaire 
+. Chaque fois qu’un champ est modifié
+* Vérifier à l’aide de votre navigateur si la gestion des requêtes AJAX correspond à ce qui vous a été dit
+
+== Architecture
+
+Modifier le code précédemment écrit pour avoir un code orienté objet, notamment en mettant en œuvre le Principe de Responsabilité Unique
+
+== Gestion des erreurs
+
+* Reprendre le link:#_gestion_de_l_envoi_des_évènements_côté_serveur[point ci-dessus] en mettant en évidence les champs en erreur
+* Lancer une exception explicitement au clic d’un bouton.
+Que se passe-t-il ?
+* Ajouter un composant dédié chargé de traiter les erreurs de ce type en les affichant
+* Remplacer le composant par des notifications adaptées
+
+== Validation
+
+* Dupliquer le projet _vaadin-form_
+* Implémenter la validation précédente via la fonctionnalité de validation du _framework_
+
+== Modèle
+
+Remplacer les différents champs découplés par un modèle que vous aurez conçu
