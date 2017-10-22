@@ -153,15 +153,13 @@ image::observer.svg[]
 
 === Côté client
 
-* Ne pas s'en préocupper
 * Du JavaScript implémente le code serveur
 * Une interaction client-serveur se traduit par un appel Ajax
 
-=== Composant immédiat
+=== Implémentation du clic
 
-* Un composant immédiat envoie l’événement _immédiatement_ au serveur
-* Un composant non-immédiat le stocke dans un tampon
-* Evènements du tampon envoyés lors du prochain événement immédiat
+[.stretch]
+image::click-event.svg[]
 
 === Architecture des abonnés
 
@@ -287,6 +285,37 @@ TextField email = TextField(”Email");
 email.addValidator(new EmailValidator());
 ----
 
+== Navigation
+
+[quote, Vaadin documentation, https://vaadin.com/docs/framework/advanced/advanced-navigator.html]
+Users often need to have direct links to specific views. The Navigator can be used for most cases of navigation.
+
+=== Modèle
+
+`Navigator`:: Gère la navigation
+`View`:: Composant affichable
+
+=== !
+
+[.stretch]
+image::navigator.svg[]
+
+=== Exemple d'utilisation
+
+[source,java]
+----
+public class NavigatorUI extends UI {
+
+    @Override
+    protected void init(VaadinRequest request) {
+        Navigator navigator = new Navigator(this, this);
+        setNavigator(navigator);
+        navigator.addView("", new InitialView());
+        navigator.addView("other", new OtherView());
+    }
+}
+----
+
 == Data Binding
 
 * Gestion évènementielle du changement d’état du modèle vers un composant graphique
@@ -360,6 +389,85 @@ Grid<Person> grid = new Grid<>(Person.class);
 grid.setDataProvider(provider);
 grid.setHeaderVisible(true);
 grid.setColumns("firstName", "lastName", "birthDate");
+----
+
+=== Spécialisations de Data Provider
+
+* `BackendDataProvider`
+* `HierarchicalDataProvider`
+* `ConfigurableFilterDataProvider`
+
+=== !
+
+[.stretch]
+image::data-provider.svg[]
+
+== Grid
+
+Composant dédié à l’affichage de données tabulées
+
+=== !
+
+[.stretch]
+image::grid.svg[]
+
+=== Affichage des colonnes
+
+* Indique les colonnes visibles
+* Mais également leur ordre
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+grid.setColumns("firstName", "lastName");
+----
+
+=== Libellé de l'en-tête de colonne
+
+Par défaut, inféré du nom de l'attribut
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+grid.getColumn("firstName").setCaption("Given Name");
+----
+
+=== Libellé de la cellule
+
+* Récupère la valeur de l'attribut
+* Utilise le `Renderer` pour la transformer en `String` 
+* Affiche la `String` dans la cellule
+
+=== Exemple : formatage de date
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+Column<Person, ?> column = grid.getColumn("birthDate");
+Renderer renderer = new LocalDateRenderer("EE dd MMM yy");
+column.setRenderer(renderer);
+----
+
+=== Exemple : rendu HTML
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+Column<Person, ?> column = grid.getColumn("biography");
+Renderer renderer = new HtmlRenderer();
+column.setRenderer(renderer);
+----
+
+=== Exemple : ajout de bouton
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+Column<Person, String> column =
+    grid.addColumn(person -> person.getFirstName());
+ButtonRenderer<String> buttonRenderer = 
+    new ButtonRenderer<>(event -> Notification.show("Shown"));
+column.setRenderer(buttonRenderer);
 ----
 
 === !
