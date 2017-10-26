@@ -5,16 +5,21 @@ before_install: mkdir -p output/images
 install:
   - bundle config --local github.https true
   - bundle --path=.bundle/gems --binstubs=.bundle/.bin
+  - cp common/course.css output/style.css
+  - cp common/stylesheets/asciidoctor.css output/default.css
 
 script:
-  - bundle exec asciidoctor-revealjs -D output -a revealjs_history=true -a revealjs_theme=white -a revealjs_slideNumber=true -a linkcss -a customcss=../style.css -a revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0 course.adoc
-  - bundle exec asciidoctor -D output README.adoc
-  - bundle exec asciidoctor -D output workshop.adoc
+  - bundle exec asciidoctor-revealjs -D output -a revealjs_history=true -a revealjs_theme=white -a revealjs_slideNumber=true -a linkcss -a customcss=style.css -a revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0 course.adoc
+  - bundle exec asciidoctor -D output README.adoc -a linkcss -a stylesheet=default.css
+  - bundle exec asciidoctor -D output workshop.adoc -a linkcss -a stylesheet=default.css
 
 after_success:      
-  - cd output ; mv README.html index.html ; cp -R ../images .
+  - cd output
+  - mv README.html index.html
+  - cp -R ../images .
   - git init
   - git config user.name "${GH_USER_NAME}"
   - git config user.email "{GH_USER_EMAIL}"
-  - git add . ; git commit -m "Deploy to GitHub Pages"
+  - git add .
+  - git commit -m "Deploy to GitHub Pages"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
