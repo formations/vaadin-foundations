@@ -94,3 +94,41 @@ Que se passe-t-il ?
 == Modèle
 
 Remplacer les différents champs découplés par un modèle que vous aurez conçu
+
+== Grid
+
+Cette section permet de s'exercer à la manipulation de `Grid`.
+
+Soit la classe suivante :
+
+[source,java]
+----
+public class Person {
+
+    private String firstName;
+    private String lastName;
+    private LocalDate birthDate;
+    
+    // Getters and setters    
+}
+----
+
+=== Données en dur
+
+* Créer une liste d'objets `Person` "en dur".
+* Les afficher dans un composant `Grid`.
+* Afficher le libellé des colonnes en français, par exemple "Nom", "Prénom" et "Date de naissance".
+* Modifier le format des cellules de date pour afficher une date comme "18 Novembre 1970".
+* Créer une colonne supplémentaire qui affiche un bouton pour supprimer l'élément.
+
+=== Données en base de données
+
+Modifier le code pour lire les données depuis une table `PERSON` préalablement initialisée d'une base de données.
+
+TIP: Utiliser la source de données par défaut du serveur d'application TomEE.
+
+=== JPA
+
+Modifier le code pour utiliser l'API JPA.
+
+TIP: Utiliser l'_addon_ https://vaadin.com/directory/component/vaadin-jpacontainer[JPAContainer^].
