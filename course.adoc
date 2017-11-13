@@ -239,6 +239,83 @@ public class SendFormBehavior implements ClickListener() {
 }  
 ----
 
+=== Problématique liées au pattern Observer
+
+Couplage entre l'Observer et son objet
+
+=== Event Bus
+
+[quote,Wikipedia,https://en.wikipedia.org/wiki/Event_monitoring]
+Transport event occurrences from sources to subscribers, where event sources signal event occurrences to all event subscribers and event subscribers receive event occurrences.
+
+=== !
+
+image::eventbus.svg[]
+
+=== !
+
+image::eventbus-annotation.svg[]
+
+=== !
+
+image::eventbus-payload.svg[]
+
+=== Implémentations existantes
+
+* https://github.com/google/guava/wiki/EventBusExplained[Guava^]
+* https://square.github.io/otto/[Otto^]
+* http://greenrobot.org/eventbus/[Green Robot]
+* Vaadin Spring Boot’s https://github.com/peholmst/vaadin4spring/tree/master/addons/eventbus[Event Bus^]
+
+=== Exemple de cas d'utilisation
+
+* Une liste déroulante pour les pays
+* Une liste déroulante pour les villes
+** Uniquement pour les villes du pays
+
+=== !
+
+[source,java]
+----
+public class CountryComboBox extends ComboBox {
+
+    public CountryComboBox(EventBus bus) {
+        addValueChangeListener(event -> {
+            bus.post(new CountryChangedEvent(event.getValue()));        
+        });
+    }
+}
+----
+
+=== !
+
+[source,java]
+----
+public class CityComboBox extends ComboBox {
+
+    @Subscribe
+    public void changeCities(CountryChangedEvent event) {
+        // Refresh cities
+    }
+}
+----
+
+=== !
+
+[source,java]
+----
+public class EventBusUI extends UI {
+
+    public void init(VaadinRequest request) {
+        EventBus bus = new EventBus();
+        CountryComboBox countries = new CountryComboBox(bus);
+        CityComboBox cities = new CityComboBox();
+        bus.register(cities);
+        // Layout components & set content
+    }
+}
+----
+
 == Erreurs
 
 image::error.svg[]

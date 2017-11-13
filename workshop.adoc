@@ -78,6 +78,10 @@ Récupérer les valeurs des champs du formulaire côté serveur avec `myComponen
 
 Modifier le code précédemment écrit pour avoir un code orienté objet, notamment en mettant en œuvre le Principe de Responsabilité Unique
 
+== Bus de données
+
+Modifier le code précédemment écrit en introduisant un bus d'évènement (par exemple, Google Guava).
+
 == Gestion des erreurs
 
 * Reprendre le link:#_gestion_de_l_envoi_des_évènements_côté_serveur[point ci-dessus] en mettant en évidence les champs en erreur
