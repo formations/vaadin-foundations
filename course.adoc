@@ -550,3 +550,67 @@ column.setRenderer(buttonRenderer);
 === !
 
 image::grid.png[Exemple de Grid,750,600]
+
+== Intégration avec CDI
+
+Via l'addon https://vaadin.com/directory/component/vaadin-cdi[Vaadin CDI^]
+
+=== Avantages
+
+* Pas de servlet enfant
+** Ni création
+** Ni référencement
+* Pas de référencement explicite de(s) _UI_(s)
+* Pas d'enregistrement explicite des _Views_
+
+=== Référencement de l'UI
+
+* Via l'annotation `@CDIUI`
+* Chemin indiqué par la valeur :
+** `@CDIUI("")`
+** `@CDIUI("fun")`
+** `@CDIUI` :
+*** Inféré en fonction du nom de la classe sans le suffixe `UI`
+
+=== !
+
+[source,java]
+----
+@CDIUI("main")
+public class MyUI extends UI {
+
+    public void init(VaadinRequest request) {
+        // Do something here
+    }
+}
+----
+
+=== Enregistrement de _Views_
+
+* Via l'annotation `@CDIView`
+* Clé d'enregistrement dans le `Navigator` indiqué par la valeur :
+** `@CDIView("")`
+* Enregistré dans un `ViewProvider`
+** Doit être associé au `Navigator`
+
+=== !
+
+[source,java]
+----
+@CDIView("hello")
+public class MyView extends HorizontalLayout 
+                    implements View() { }
+
+@CDIUI("") public class MyUI extends UI {
+
+    @Inject
+    private ViewProvider viewProvider;
+
+    public void init(VaadinRequest request) {
+        Navigator navigator = new Navigator(this, this);
+        navigator.addProvider(viewProvider);
+        navigator.navigateTo("hello");
+    }
+}
+----
+

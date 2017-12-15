@@ -136,3 +136,7 @@ TIP: Utiliser la source de données par défaut du serveur d'application TomEE.
 Modifier le code pour utiliser l'API JPA.
 
 TIP: Injecter l'objet `EntityManager`.
+
+=== CDI
+
+Modifier le code pour utiliser l'extension CDI de Vaadin.
