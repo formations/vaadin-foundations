@@ -135,4 +135,4 @@ TIP: Utiliser la source de données par défaut du serveur d'application TomEE.
 
 Modifier le code pour utiliser l'API JPA.
 
-TIP: Utiliser l'_addon_ https://vaadin.com/directory/component/vaadin-jpacontainer[JPAContainer^].
+TIP: Injecter l'objet `EntityManager`.
