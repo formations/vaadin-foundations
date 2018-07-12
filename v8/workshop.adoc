@@ -1,4 +1,4 @@
-= Travaux pratiques - Fondations de Vaadin 
+= Travaux pratiques - Fondations de Vaadin v8
 Nicolas Frankel
 :doctype: article
 :encoding: utf-8
@@ -13,7 +13,9 @@ Nicolas Frankel
 :imagesdir: ./images/workshop
 :toc:
 
-include::license.adoc[]
+include::../common/license.adoc[]
+
+include::v8-warning.adoc[]
 
 toc::[]
 

@@ -1,6 +1,9 @@
-= Les fondations de Vaadin
+= Les fondations de Vaadin v8
 
 :imagesdir: ./images
+:icons: font
+
+include::v8-warning.adoc[]
 
 == Pourquoi Vaadin ?
 
