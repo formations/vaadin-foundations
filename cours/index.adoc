@@ -1,0 +1,779 @@
+= Fondations de Vaadin
+Nicolas Frankel
+:encoding: utf-8
+:lang: fr
+:imagesdir: images
+:icons: font
+:source-highlighter: highlightjs
+:highlightjs-theme: ../highlight/styles/github.min.css
+
+== Pourquoi Vaadin ?
+
+La solution standard pour faire du web avec Java est Java EE
+
+=== Le Web avec Java EE
+
+|===
+
+| HTTP | Java
+| HTML | API Servlet
+| CSS | JSP
+| JavaScript | Taglibs/Tag files
+| AJAX 
+| DOM
+
+|===
+
+=== Le Web avec Vaadin
+
+[options="header"]
+|===
+ 
+| Obligatoire | Facultatif
+
+| Java
+| CSS
+
+| Vaadin
+| Web Component
+
+|===
+
+=== Attention
+
+WARNING: La v10 de Vaadin nécessite plus de compétences et d'effort CSS que les versions précédentes pour un rendu comparable
+
+=== Quelques principes
+
+* Code en Java
+** Compilé en bytecode
+* Basé sur des composants réutilisables
+* Programmation évènementielle
+* Compatibles mobile
+
+=== Contraintes
+
+* Java 8+
+* Container de servlets Java EE 6+
+
+=== Architecture générale
+
+image::architecture.png[]
+
+== Concepts fondamentaux
+
+* Servlet
+* UI
+* Route
+* Composants
+* Containers
+
+=== Servlet
+
+* Servlet spécifique `VaadinServlet`
+* Enregistre automatiquement une instance sous `/*`
+** Si aucune instance n'est enregistrée explicitement
+
+=== Vaadin Servlet
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/server/VaadinServlet.html]
+The main servlet, which handles all incoming requests to the application.
+
+=== !
+
+[.stretch]
+image::vaadin-servlet.svg[]
+
+=== UI
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/UI.html]
+The topmost component in any component hierarchy.
+There is one UI for every Vaadin instance in a browser window.
+A UI may either represent an entire browser window (or tab) or some part of a html page where a Vaadin application is embedded.
+
+=== Caractéristiques
+
+* Représente le `<body>` d'une page HTML
+* Classe d'UI spécifiée par une annotation
+
+=== !
+
+[.stretch]
+image::ui.svg[]
+
+=== Exemple de configuration explicite
+
+[source,java]
+----
+public class MyUI extends UI {
+
+    @Override
+    protected void init(VaadinRequest request) {
+        add(new Span("Hello world!"));
+    }
+}
+
+@VaadinServletConfiguration(
+    ui = MyUI.class,
+    productionMode = false
+)
+public class MyVaadinServlet extends VaadinServlet { }
+----
+
+== Component
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/Component.html]
+Component is a higher level abstraction of an `Element` or a hierarchy of Elements.
+
+=== Caractéristiques
+
+* Classe (abstraite) de plus haut niveau héritée par tous les composants Vaadin
+* Disposé sur un composant parent
+* Ou annotée avec une annotation `@Route`
+
+=== !
+
+[.stretch]
+image::component.svg[]
+
+=== Composants disponibles
+
+* `Label`
+* `TextField`
+* `Button`
+* `Select`
+* `Grid`
+* etc.
+
+=== Samplers
+
+* http://demo.vaadin.com/sampler-for-vaadin6[Version 6^]
+* http://demo.vaadin.com/sampler/[Version 8^]
+* https://vaadin.com/components/browse/[Version 10^]
+
+=== !
+
+[.stretch]
+image::sampler.png[]
+
+== Has Components
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/HasComponents.html]
+A component to which the user can add and remove child components.
+
+=== Has Components disponibles
+
+* `VerticalLayout`
+* `HorizontalLayout`
+* `FormLayout`
+* etc.
+
+=== !
+
+[.stretch]
+image::has-components.svg[]
+
+== Route
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/router/Route.html]
+Defines the route for components that function as navigation targets in routing.
+
+=== Caractéristiques
+
+* Associe un chemin d'accès à un composant
+* Indiqué par l'annotation `@Route`
+* Configuré par Vaadin au démarrage de l'application
+
+=== Chemin par défaut
+
+* Nom de la classe
+* Suppression du suffixe `View`
+* En minuscules
+* Ou `""` pour la vue `MainXXX`
+
+=== !
+
+[.stretch]
+image::routes.svg[]
+
+=== Exemple de route
+
+[source,java]
+----
+@Route("home")
+public class MainView extends Div {
+
+  public MainView() {
+    setText("Hello world!");
+  }
+}
+----
+
+== Routes : concepts avancés
+
+* Composant affiché
+* Routes paramétrées
+* Liens de routeur
+
+=== Composant affiché par la route
+
+* Par défaut, le composant est affiché comme enfant de l'UI
+* Comment faire pour l'afficher sur un autre parent ?
+
+=== Elément `@Route.layout`
+
+* Configure le composant sur lequel le composant doit être affiché
+* Le composant doit implémenter `RouterLayout`
+
+=== Exemple de code
+
+[source,java]
+----
+@Route(layout = ParentView.class)
+public class AView extends VerticalLayout { }
+
+public class ParentView extends Div implements RouterLayout { }
+----
+
+=== Parent de parent
+
+* Si le parent doit lui-même avoir un parent, il existe `@ParentLayout`
+* Le parent configuré doit également implémenter `RouterLayout`
+
+=== Exemple de code
+
+[source,java]
+----
+@Route(layout = ParentView.class)
+public class AView extends VerticalLayout { }
+
+@ParentLayout(RootLayout.class)
+public class ParentView extends Div implements RouterLayout { }
+
+public class RootLayout extends Div implements RouterLayout { }
+----
+
+=== Routes paramétrées
+
+* Comment gérer les URL de type REST ?
+** Par exemple, `person/1`
+
+=== !
+
+[.stretch]
+image::parameterized-routes.svg[]
+
+=== Exemple de route paramétrée
+
+[source,java]
+----
+@Route("person")
+public class PersonView extends Div
+                        implements HasUrlParameter<String> {
+  @Override
+  public void setParameter(BeforeEvent event,
+                           String person) {
+    setText("Hello " + person + "!"); <1>
+  }
+}
+----
+
+<1> `person/Doe`
+
+=== Exemple de route paramétrée
+
+[source,java]
+----
+@Route("person")
+public class PersonView extends Div
+                        implements HasUrlParameter<String> {
+  @Override
+  public void setParameter(BeforeEvent event,
+        @OptionalParameter String person) {
+    if (person == null) {
+      setText("Hello nobody!");         <1>
+    } else {
+      setText("Hello " + person + "!"); <2>
+    }
+  }
+}
+----
+
+<1> `person`
+<2> `person/Doe`
+
+=== Exemple de route paramétrée
+
+[source,java]
+----
+@Route("person")
+public class PersonView extends Div
+                        implements HasUrlParameter<String> {
+  @Override
+  public void setParameter(BeforeEvent event,
+        @OptionalParameter String person) {
+    if (person.isEmpty()) {
+      setText("Hello nobody!");                    <1>
+    } else {
+      setText("Hello " + person.split()[0] + "!"); <2>
+    }
+  }
+}
+----
+
+<1> `person`
+<2> `person/Doe/John`
+
+=== Lien de routeur
+
+Permet de construire un lien vers un composant
+
+=== !
+
+[.stretch]
+image::router-link.svg[]
+
+=== Exemple de lien de routeur
+
+[source,java]
+----
+new RouterLink("Say hello", HelloView.class, "John");
+
+public class HelloView extends Div
+                        implements HasUrlParameter<String> {
+                        
+  @Override
+  public void setParameter(BeforeEvent event,
+                           String name) {
+    setText("Hello " + name + "!");
+  }
+}
+----
+
+== Programmation Evènementielle
+
+* Implémentation du _pattern Observer_
+* Présent dans tous les clients lourds :
+** Swing/AWT
+** SWT
+** Flex
+** JavaFX
+* Mais pas dans le web...
+
+=== !
+
+image::observer.svg[]
+
+=== Qui est _Subject_ ?
+
+* Tous les `Component` sont des `Subject`
+* Génèrent des évènements en fonction :
+** Du type de composant
+** Du type de déclencheur
+
+=== Exemple
+
+`Button` génère :
+
+* `FocusEvent`
+* `BlurEvent`
+* `ClickEvent`
+
+=== Qui est Observer ?
+
+* Toute classe peut implémenter _Observer_
+* Par exemple, l'UI
+
+=== Côté client
+
+* Du JavaScript implémente le code serveur
+* Une interaction client-serveur se traduit par un appel AJAX
+
+=== !
+
+[.stretch]
+image::observer-impl.svg[]
+
+=== !
+
+[.stretch]
+image::click-notifier.svg[]
+
+=== Nature des abonnés
+
+* Notion d’abonnement portée par une interface
+* N'importe laquelle :
+** Une classe anonyme
+** Une classe dédiée
+
+=== Classe anonyme abonnée
+
+Avantages::
+Porte l’information du comportement avec sa déclaration
+Désavantages::
+* Perte de la référence sur le comportement
+* Couplage fort
+
+=== !
+
+[source,java]
+----
+new Button("Click me!").addClickListener(
+  new ComponentEventListener<ClickEvent<Button>>() {
+
+    @Override
+    public void onComponentEvent(ClickEvent<Button> e) {
+      ...
+    }
+  }
+);
+
+new Button("Click me!").addClickListener(event -> {
+  ...
+});
+----
+
+=== Classe dédiée abonnée
+
+Avantages::
+* Entièrement orienté objet
+* Lisible
+* Changement dynamique possible
+* Séparation des responsabilités
+* Nommage sémantique
+Désavantage::
+Verbeux
+
+=== !
+
+[source,java]
+----
+public class SendFormBehavior
+  implements ComponentEventListener<ClickEvent<Button>> {
+
+  @Override
+  public void onComponentEvent(ClickEvent<Button> e) {
+    ...
+  }
+}  
+----
+
+=== Problématique liées au _pattern Observer_
+
+Couplage entre l' _Observer_ et son sujet
+
+=== Event Bus
+
+[quote,Wikipedia,https://en.wikipedia.org/wiki/Event_monitoring]
+Transport event occurrences from sources to subscribers, where event sources signal event occurrences to all event subscribers and event subscribers receive event occurrences.
+
+=== !
+
+[.stretch]
+image::eventbus.svg[]
+
+=== !
+
+[.stretch]
+image::eventbus-annotation.svg[]
+
+=== !
+
+[.stretch]
+image::eventbus-payload.svg[]
+
+=== Implémentations existantes
+
+* https://github.com/google/guava/wiki/EventBusExplained[Guava^]
+* https://square.github.io/otto/[Otto^]
+* http://greenrobot.org/eventbus/[Green Robot]
+* Vaadin Spring Boot’s https://github.com/peholmst/vaadin4spring/tree/master/addons/eventbus[Event Bus^]
+
+=== Exemple de cas d'utilisation
+
+* Une liste déroulante pour les pays
+* Une liste déroulante pour les villes
+** Uniquement pour les villes du pays
+
+=== !
+
+[source,java]
+----
+public class CountryComboBox extends ComboBox<Country> {
+
+  public CountryComboBox(EventBus bus) {
+    addValueChangeListener(event -> {
+      bus.post(new CountryChangedEvent(event.getValue()));        
+    });
+  }
+}
+----
+
+=== !
+
+[source,java]
+----
+public class CityComboBox extends ComboBox<City> {
+
+  @Subscribe
+  public void changeCities(CountryChangedEvent event) {
+    // Refresh cities
+  }
+}
+----
+
+=== !
+
+[source,java]
+----
+@Route
+public class SampleView extends VerticalLayout {
+
+  public SampleView() {
+    EventBus eventBus = new EventBus();
+    CountryComboBox countries = new CountryComboBox(eventBus);
+    CityComboBox cities = new CityComboBox();
+    eventBus.register(cities);
+    add(countries, cities);
+  }
+}
+----
+
+== Has Validation
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/HasValidation.html]
+A component that supports input validation.
+
+image::invalid.png[]
+
+=== !
+
+[.stretch]
+image::has-validation.svg[]
+
+=== Mettre un composant en erreur
+
+[source,java]
+----
+ComboBox combo = new ComboBox();
+...
+combo.setInvalid(true);
+combo.setErrorMessage("Invalid selection");
+----
+
+=== Error Handler
+
+* Gère les erreurs inattendues
+* Par exemple, les exceptions
+
+=== !
+
+[.stretch]
+image::error-handler.svg[]
+
+=== Par défaut
+
+image::default-error-handler.png[]
+
+=== Notifications
+
+Informe l'utilisateur par l'affichage d'un composant contextuel
+
+image::error-notification.png[]
+
+=== !
+
+[.stretch]
+image::notification.svg[]
+
+=== Has Validator
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/data/binder/HasValidator.html]
+A generic interface for field components and other user interface objects that have a user-editable value that should be validated.
+
+=== !
+
+[.stretch]
+image::validator.svg[]
+
+=== Validateurs disponibles
+
+* XXXRangeValidator :
+** Types _wrapper_ numériques
+** `BigInteger` & `BigDecimal`
+** `Date` & `DateTime`
+* `BeanValidator`
+* `RegexpValidator`
+* `EmailValidator`
+* `StringLengthValidator`
+
+=== Exemple d’utilisation
+
+[source,java]
+----
+public class EmailField extends TextField implements HasValidator<String> {
+
+  public EmailField() {
+    addValueChangeListener(event -> {
+      ValidationResult r = getDefaultValidator().apply(getValue(), null);
+      if (r.isError()) { setToInvalid(r.getErrorMessage()); }
+      else { resetToValid(); }
+    });
+  }
+
+  @Override
+  public Validator<String> getDefaultValidator() {
+    return new EmailValidator("Value " + getValue() + " is not an email");
+  }
+}
+----
+
+== Data Binding
+
+* Gestion évènementielle du changement d’état du modèle vers un composant graphique
+* Et vice-versa
+
+=== Niveaux de data binding
+
+* Propriété _p.e._ `email`
+* Bean _p.e_ `Person`
+* Liste de beans
+
+=== Has Value
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/HasValue.html]
+A generic interface for field components and other user interface objects that have a user-editable value.
+Emits change events whenever the value is changed, either by the user or programmatically.
+
+=== !
+
+[.stretch]
+image::has-value.svg[]
+
+=== Binder
+
+[quote, Vaadin documentation, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/data/binder/Binder.html]
+Connects one or more Field components to properties of a backing data type such as a bean type.
+
+=== !
+
+[.stretch]
+image::binder.svg[]
+
+=== Exemple
+
+[source,java]
+----
+Binder<Person> binder = new Binder<>(Person.class);
+binder.setBean(new Person());
+TextField firstNameField = new TextField("Given name");
+TextField lastNameField = new TextField("Family name");
+DatePicker birthdateField = new DatePicker("Date of birth");
+binder.bind(firstNameField, "firstName");
+binder.bind(lastNameField, "lastName");
+binder.bind(birthDateField, "birthdate");
+
+// User interaction
+
+Person person = binder.getBean();
+String firstName = person.getFirstName();
+String lastName = person.getLastName();
+LocalDate birthdate = person.getBirthDate();
+----
+
+=== !
+
+image::form-binder.png[]
+
+=== Has Items
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/data/binder/HasItems.html]
+Mixin interface for components that displays a collection of items.
+
+=== !
+
+[.stretch]
+image::has-items.svg[]
+
+=== Exemple de code
+
+[source,java]
+----
+List<Person> persons = ...;
+ListDataProvider<Person> provider =
+    new ListDataProvider<>(persons);
+Grid<Person> grid = new Grid<>(Person.class);
+grid.setDataProvider(provider);
+grid.setColumns("firstName", "lastName", "birthdate");
+----
+
+=== !
+
+image::has-items.png[]
+
+=== !
+
+[.stretch]
+image::data-providers.svg[]
+
+== Grid
+
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/grid/Grid.html]
+Server-side component for the <vaadin-grid> element.
+
+=== !
+
+[.stretch]
+image::grid.svg[]
+
+=== Affichage des colonnes
+
+* Indique les colonnes visibles
+* Mais également leur ordre
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+grid.setColumns("firstName", "lastName");
+----
+
+=== Libellé de l'en-tête de colonne
+
+Par défaut, inféré du nom de l'attribut
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+grid.getColumn("firstName")
+    .setHeader("Prénom");
+----
+
+=== Libellé de la cellule
+
+* Récupère la valeur de l'attribut
+* Utilise le `Renderer` pour la transformer en `String` 
+* Affiche la `String` dans la cellule
+
+=== Exemple : formatage de date
+
+[source,java]
+----
+Grid<Person> grid = new Grid<>(Person.class);
+grid.addColumn(
+    new LocalDateRenderer<>(Person::getBirthdate, "")
+);
+----
+
+=== Exemple : ajout de bouton
+
+[source,java]
+----
+grid.addColumn(new NativeButtonRenderer<>(
+    "Click me!",
+    event -> Notification.show("Hello world!"))
+);
+----
+
+=== !
+
+image::grid.png[]

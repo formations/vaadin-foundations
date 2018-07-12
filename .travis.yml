@@ -1,6 +1,18 @@
 language: ruby
+rvm:
+  - jruby
 
-before_install: mkdir -p output/v8/images
+git:
+  depth: false
+
+cache:
+  - bundler
+  - directories:
+    - /home/travis/.rvm/
+
+before_install:
+  - mkdir -p output/v8/images
+  - mkdir -p output/cours/images
 
 install:
   - bundle config --local github.https true
@@ -12,10 +24,14 @@ script:
   - bundle exec asciidoctor-revealjs -D output/v8 -a revealjs_history=true -a revealjs_theme=white -a revealjs_slideNumber=true -a linkcss -a customcss=../style.css -a revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0 v8/course.adoc
   - bundle exec asciidoctor -D output/v8 v8/index.adoc -a linkcss -a stylesheet=../default.css
   - bundle exec asciidoctor -D output/v8 v8/workshop.adoc -a linkcss -a stylesheet=../default.css
+  - bundle exec asciidoctor-revealjs -D output/cours -a revealjs_history=true -a revealjs_theme=white -a revealjs_slideNumber=true -a linkcss -a customcss=../style.css -a revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0 cours/index.adoc
+  - bundle exec asciidoctor -D output index.adoc -a linkcss -a stylesheet=default.css
+  - bundle exec asciidoctor -D output/tp tp/index.adoc -a linkcss -a stylesheet=../default.css
 
 after_success:      
   - cd output
   - cp -R ../images v8
+  - cp -R ../cours/images cours
   - git init
   - git config user.name "${GH_USER_NAME}"
   - git config user.email "{GH_USER_EMAIL}"

@@ -1,0 +1,16 @@
+= Fondations de Vaadin
+Nicolas Frankel
+:doctype: article
+:encoding: utf-8
+:lang: fr
+
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
++++<a href="https://github.com/formations/vaadin-foundations"><img style="position: fixed; top: 0; right: 0; border: 0;" target="_blank" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>+++
+
+include::common/license.adoc[]
+
+. <<cours/index.adoc#,Cours>>
+. <<tp/index.adoc#,Travaux Pratiques>>
+
+Le cours relatif à la version 8 du framework Vaadin v8 est disponible <<v8/index.adoc#,ici>>.
