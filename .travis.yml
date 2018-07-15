@@ -19,6 +19,7 @@ install:
   - bundle --path=.bundle/gems --binstubs=.bundle/.bin
   - cp common/course.css output/style.css
   - cp common/stylesheets/asciidoctor.css output/default.css
+  - cp -R common/highlight .
 
 script:
   - bundle exec asciidoctor-revealjs -D output/v8 -a revealjs_history=true -a revealjs_theme=white -a revealjs_slideNumber=true -a linkcss -a customcss=../style.css -a revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0 v8/course.adoc
@@ -30,6 +31,7 @@ script:
 
 after_success:      
   - cd output
+  - cp -R ../highlight .
   - cp -R ../images v8
   - cp -R ../cours/images cours
   - git init
