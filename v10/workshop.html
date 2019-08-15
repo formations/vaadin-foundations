@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="author" content="Nicolas Frankel">
+<title>Travaux pratiques - Fondations de Vaadin</title>
+<link rel="stylesheet" href="./../default.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>Travaux pratiques - Fondations de Vaadin</h1>
+<div class="details">
+<span id="author" class="author">Nicolas Frankel</span><br>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/formations/vaadin-foundations"><img style="position: fixed; top: 0; right: 0; border: 0;" target="_blank" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a></p>
+</div>
+<div class="paragraph">
+<p><span class="image left"><a class="image" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" alt="Licence Creative Commons"></a></span></p>
+</div>
+<div class="paragraph">
+<p>Ce document est mis à disposition selon les termes de la <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.</p>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Table des matières</div>
+<ul class="sectlevel1">
+<li><a href="#_installation_du_plugin_dans_lide">1. Installation du <em>plugin</em> dans l&#8217;IDE</a></li>
+<li><a href="#_exploration_des_composants">2. Exploration des composants</a></li>
+<li><a href="#_exploration_des_layouts">3. Exploration des <em>layouts</em></a></li>
+<li><a href="#_création_de_formulaire">4. Création de formulaire</a></li>
+<li><a href="#_envoi_du_formulaire">5. Envoi du formulaire</a></li>
+<li><a href="#_gestion_de_lenvoi_des_évènements_côté_serveur">6. Gestion de l&#8217;envoi des évènements côté serveur</a></li>
+<li><a href="#_architecture">7. Architecture</a></li>
+<li><a href="#_bus_de_données">8. Bus de données</a></li>
+<li><a href="#_gestion_des_erreurs">9. Gestion des erreurs</a></li>
+<li><a href="#_validation">10. Validation</a></li>
+<li><a href="#_modèle">11. Modèle</a></li>
+<li><a href="#_grid">12. Grid</a>
+<ul class="sectlevel2">
+<li><a href="#_données_en_dur">12.1. Données en dur</a></li>
+<li><a href="#_données_en_base_de_données">12.2. Données en base de données</a></li>
+<li><a href="#_jpa">12.3. JPA</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation_du_plugin_dans_lide"><a class="anchor" href="#_installation_du_plugin_dans_lide"></a>1. Installation du <em>plugin</em> dans l&#8217;IDE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consulter la documentation :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://vaadin.com/docs/v10/designer/getting-started/designer-installing-eclipse.html" target="_blank" rel="noopener">Pour Eclipse</a></p>
+</li>
+<li>
+<p><a href="https://vaadin.com/docs/v10/designer/getting-started/designer-installing-idea.html" target="_blank" rel="noopener">Pour IntelliJ IDEA</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exploration_des_composants"><a class="anchor" href="#_exploration_des_composants"></a>2. Exploration des composants</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Créer un projet Vaadin <em>vaadin-components</em></p>
+</li>
+<li>
+<p>Créer une classe qui hérite de <code>VerticalLayout</code></p>
+</li>
+<li>
+<p>A l’aide du sampler, ajouter les composants suivantes au <em>layout</em> :</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>Text</code></p>
+</li>
+<li>
+<p><code>Span</code></p>
+</li>
+<li>
+<p><code>TextField</code></p>
+</li>
+<li>
+<p><code>DatePicker</code></p>
+</li>
+<li>
+<p><code>Grid</code></p>
+</li>
+<li>
+<p><code>Button</code></p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>A quoi correspond le premier argument du constructeur dans les types <code>TextField</code> et <code>DatePicker</code>?</p>
+</li>
+<li>
+<p>A l’aide du navigateur, identifier les éléments HTML correspondants</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Pour afficher le <em>layout</em> et ses composants, annoter la class avec <code>@Route("")</code>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exploration_des_layouts"><a class="anchor" href="#_exploration_des_layouts"></a>3. Exploration des <em>layouts</em></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>En conservant le même projet, changer le <code>VerticalLayout</code> en :</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>HorizontalLayout</code></p>
+</li>
+<li>
+<p><code>FormLayout</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Qu’observez-vous ?</p>
+</li>
+<li>
+<p>A l’aide du navigateur, identifier les éléments HTML correspondants</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_création_de_formulaire"><a class="anchor" href="#_création_de_formulaire"></a>4. Création de formulaire</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Créer un projet Vaadin <em>vaadin-form</em></p>
+</li>
+<li>
+<p>Créer le formulaire suivant :</p>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Libellé</th>
+<th class="tableblock halign-left valign-top">Type de données</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chaîne de caractères</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prénom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chaîne de caractères</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date de Naissance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nationalité</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste multi-valuée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Commune d’Origine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chaîne de Caractères</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S’enregistrer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bouton</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_envoi_du_formulaire"><a class="anchor" href="#_envoi_du_formulaire"></a>5. Envoi du formulaire</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Récupérer les valeurs des champs du formulaire côté serveur avec <code>myComponent.getValue()</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gestion_de_lenvoi_des_évènements_côté_serveur"><a class="anchor" href="#_gestion_de_lenvoi_des_évènements_côté_serveur"></a>6. Gestion de l&#8217;envoi des évènements côté serveur</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Valider les champs de deux manières différentes :</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A la soumission du formulaire</p>
+</li>
+<li>
+<p>Chaque fois qu’un champ est modifié</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Vérifier à l’aide des outils de développement du navigateur comment Vaadin gères les requêtes HTTP</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_architecture"><a class="anchor" href="#_architecture"></a>7. Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Modifier le code précédemment écrit pour avoir un code orienté objet, notamment en mettant en œuvre le Principe de Responsabilité Unique</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bus_de_données"><a class="anchor" href="#_bus_de_données"></a>8. Bus de données</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Modifier le code précédemment écrit en introduisant un bus d&#8217;évènement (par exemple, Google Guava).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gestion_des_erreurs"><a class="anchor" href="#_gestion_des_erreurs"></a>9. Gestion des erreurs</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Reprendre le <a href="#_gestion_de_l_envoi_des_évènements_côté_serveur">point ci-dessus</a> en mettant en évidence les champs en erreur</p>
+</li>
+<li>
+<p>Lancer une exception explicitement au clic d’un bouton.
+Que se passe-t-il ?</p>
+</li>
+<li>
+<p>Ajouter un composant dédié chargé de traiter les erreurs de ce type en les affichant</p>
+</li>
+<li>
+<p>Remplacer le composant par des notifications adaptées</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_validation"><a class="anchor" href="#_validation"></a>10. Validation</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Dupliquer le projet <em>vaadin-form</em></p>
+</li>
+<li>
+<p>Implémenter la validation précédente via la fonctionnalité de validation du <em>framework</em></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_modèle"><a class="anchor" href="#_modèle"></a>11. Modèle</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Remplacer les différents champs découplés par un modèle que vous aurez conçu</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_grid"><a class="anchor" href="#_grid"></a>12. Grid</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cette section permet de s&#8217;exercer à la manipulation de <code>Grid</code>.</p>
+</div>
+<div class="paragraph">
+<p>Soit la classe suivante :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public class Person {
+
+    private String firstName;
+    private String lastName;
+    private LocalDate birthDate;
+
+    // Getters and setters
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_données_en_dur"><a class="anchor" href="#_données_en_dur"></a>12.1. Données en dur</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Créer une liste d&#8217;objets <code>Person</code> "en dur".</p>
+</li>
+<li>
+<p>Les afficher dans un composant <code>Grid</code>.</p>
+</li>
+<li>
+<p>Afficher le libellé des colonnes en français, par exemple "Nom", "Prénom" et "Date de naissance".</p>
+</li>
+<li>
+<p>Modifier le format des cellules de date pour afficher une date comme "18 Novembre 1970".</p>
+</li>
+<li>
+<p>Créer une colonne supplémentaire qui affiche un bouton pour supprimer l&#8217;élément.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_données_en_base_de_données"><a class="anchor" href="#_données_en_base_de_données"></a>12.2. Données en base de données</h3>
+<div class="paragraph">
+<p>Modifier le code pour lire les données depuis une table <code>PERSON</code> préalablement initialisée d&#8217;une base de données.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Utiliser la source de données par défaut du serveur d&#8217;application TomEE.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jpa"><a class="anchor" href="#_jpa"></a>12.3. JPA</h3>
+<div class="paragraph">
+<p>Modifier le code pour utiliser l&#8217;API JPA.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Injecter l&#8217;objet <code>EntityManager</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-15 14:46:55 UTC
+</div>
+</div>
+</body>
+</html>
