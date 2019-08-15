@@ -39,6 +39,10 @@ La solution standard pour faire du web avec Java est Java EE
 
 |===
 
+=== Attention
+
+WARNING: La v10 de Vaadin nécessite plus de compétences et d'effort CSS que les versions précédentes pour un rendu comparable
+
 === Quelques principes
 
 * Code en Java
@@ -72,7 +76,7 @@ image::architecture.png[]
 
 === Vaadin Servlet
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/server/VaadinServlet.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/server/VaadinServlet.html]
 The main servlet, which handles all incoming requests to the application.
 
 === !
@@ -82,7 +86,7 @@ image::vaadin-servlet.svg[]
 
 === UI
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/component/UI.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/UI.html]
 The topmost component in any component hierarchy.
 There is one UI for every Vaadin instance in a browser window.
 A UI may either represent an entire browser window (or tab) or some part of a html page where a Vaadin application is embedded.
@@ -108,13 +112,17 @@ public class MyUI extends UI {
         add(new Span("Hello world!"));
     }
 }
-----
 
-L'UI doit être explicitement enregistrée, comme le servlet
+@VaadinServletConfiguration(
+    ui = MyUI.class,
+    productionMode = false
+)
+public class MyVaadinServlet extends VaadinServlet { }
+----
 
 == Component
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/component/Component.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/Component.html]
 Component is a higher level abstraction of an `Element` or a hierarchy of Elements.
 
 === Caractéristiques
@@ -141,7 +149,7 @@ image::component.svg[]
 
 * http://demo.vaadin.com/sampler-for-vaadin6[Version 6^]
 * http://demo.vaadin.com/sampler/[Version 8^]
-* https://vaadin.com/components/[Version 14^]
+* https://vaadin.com/components/browse/[Version 10^]
 
 === !
 
@@ -150,7 +158,7 @@ image::sampler.png[]
 
 == Has Components
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/component/HasComponents.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/HasComponents.html]
 A component to which the user can add and remove child components.
 
 === Has Components disponibles
@@ -167,7 +175,7 @@ image::has-components.svg[]
 
 == Route
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/router/Route.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/router/Route.html]
 Defines the route for components that function as navigation targets in routing.
 
 === Caractéristiques
@@ -186,11 +194,7 @@ Defines the route for components that function as navigation targets in routing.
 === !
 
 [.stretch]
-image::routes-1.svg[]
-
-=== !
-
-image::routes-2.svg[]
+image::routes.svg[]
 
 === Exemple de route
 
@@ -228,8 +232,7 @@ public class MainView extends Div {
 @Route(layout = ParentView.class)
 public class AView extends VerticalLayout { }
 
-public class ParentView extends Div implements RouterLayout {
-}
+public class ParentView extends Div implements RouterLayout { }
 ----
 
 === Parent de parent
@@ -245,11 +248,9 @@ public class ParentView extends Div implements RouterLayout {
 public class AView extends VerticalLayout { }
 
 @ParentLayout(RootLayout.class)
-public class ParentView extends Div implements RouterLayout {
-}
+public class ParentView extends Div implements RouterLayout { }
 
-public class RootLayout extends Div implements RouterLayout {
-}
+public class RootLayout extends Div implements RouterLayout { }
 ----
 
 === Routes paramétrées
@@ -301,12 +302,35 @@ public class PersonView extends Div
 <1> `person`
 <2> `person/Doe`
 
+=== Exemple de route paramétrée
+
+[source,java]
+----
+@Route("person")
+public class PersonView extends Div
+                        implements HasUrlParameter<String> {
+  @Override
+  public void setParameter(BeforeEvent event,
+        @OptionalParameter String person) {
+    if (person.isEmpty()) {
+      setText("Hello nobody!");                    <1>
+    } else {
+      setText("Hello " + person.split()[0] + "!"); <2>
+    }
+  }
+}
+----
+
+<1> `person`
+<2> `person/Doe/John`
+
 === Lien de routeur
 
 Permet de construire un lien vers un composant
 
 === !
 
+[.stretch]
 image::router-link.svg[]
 
 === Exemple de lien de routeur
@@ -367,6 +391,7 @@ image::observer.svg[]
 
 === !
 
+[.stretch]
 image::observer-impl.svg[]
 
 === !
@@ -516,7 +541,7 @@ public class SampleView extends VerticalLayout {
 
 == Has Validation
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/component/HasValidation.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/HasValidation.html]
 A component that supports input validation.
 
 image::invalid.png[]
@@ -548,7 +573,7 @@ image::error-handler.svg[]
 
 === Par défaut
 
-Log l'exception dans la sortie d'erreur
+image::default-error-handler.png[]
 
 === Notifications
 
@@ -558,15 +583,17 @@ image::error-notification.png[]
 
 === !
 
+[.stretch]
 image::notification.svg[]
 
 === Has Validator
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/data/binder/HasValidator.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/data/binder/HasValidator.html]
 A generic interface for field components and other user interface objects that have a user-editable value that should be validated.
 
 === !
 
+[.stretch]
 image::validator.svg[]
 
 === Validateurs disponibles
@@ -614,7 +641,7 @@ public class EmailField extends TextField implements HasValidator<String> {
 
 === Has Value
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/component/HasValue.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/HasValue.html]
 A generic interface for field components and other user interface objects that have a user-editable value.
 Emits change events whenever the value is changed, either by the user or programmatically.
 
@@ -625,8 +652,8 @@ image::has-value.svg[]
 
 === Binder
 
-[quote, Vaadin documentation, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/data/binder/Binder.html]
-Connects one or more `Field` components to properties of a backing data type such as a bean type.
+[quote, Vaadin documentation, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/data/binder/Binder.html]
+Connects one or more Field components to properties of a backing data type such as a bean type.
 
 === !
 
@@ -644,14 +671,14 @@ TextField lastNameField = new TextField("Family name");
 DatePicker birthdateField = new DatePicker("Date of birth");
 binder.bind(firstNameField, "firstName");
 binder.bind(lastNameField, "lastName");
-binder.bind(birthdateField, "birthdate");
+binder.bind(birthDateField, "birthdate");
 
 // User interaction
 
 Person person = binder.getBean();
 String firstName = person.getFirstName();
 String lastName = person.getLastName();
-LocalDate birthdate = person.getBirthdate();
+LocalDate birthdate = person.getBirthDate();
 ----
 
 === !
@@ -660,7 +687,7 @@ image::form-binder.png[]
 
 === Has Items
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/data/binder/HasItems.html]
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/data/binder/HasItems.html]
 Mixin interface for components that displays a collection of items.
 
 === !
@@ -691,11 +718,12 @@ image::data-providers.svg[]
 
 == Grid
 
-[quote, Vaadin Javadocs, https://vaadin.com/api/platform/14.0.0/com/vaadin/flow/component/grid/Grid.html]
-Server-side component for the `<vaadin-grid>` element.
+[quote, Vaadin Javadocs, https://demo.vaadin.com/javadoc/com.vaadin/vaadin-core/10.0.1/com/vaadin/flow/component/grid/Grid.html]
+Server-side component for the <vaadin-grid> element.
 
 === !
 
+[.stretch]
 image::grid.svg[]
 
 === Affichage des colonnes

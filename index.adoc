@@ -13,4 +13,9 @@ include::common/license.adoc[]
 . <<cours/index.adoc#,Cours>>
 . <<tp/index.adoc#,Travaux Pratiques>>
 
-Le cours relatif à la version 8 du framework Vaadin v8 est disponible <<v8/index.adoc#,ici>>.
+Le cours est relatif à la version 14 du framework Vaadin.
+
+Les cours pour les anciennes version sont disponibles :
+
+* <<v8/index.adoc#,version 8>>
+* <<v10/index.adoc#,version 10>>

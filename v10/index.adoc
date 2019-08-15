@@ -1,0 +1,15 @@
+= Fondations de Vaadin v10
+Nicolas Frankel
+:doctype: article
+:encoding: utf-8
+:lang: fr
+:icons: font
+
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
+include::../common/license.adoc[]
+
+include::v10-warning.adoc[]
+
+. <<course.adoc#,Cours>>
+. <<workshop.adoc#,Travaux Pratiques>>

@@ -1,0 +1,154 @@
+= Travaux pratiques - Fondations de Vaadin
+Nicolas Frankel
+:doctype: article
+:encoding: utf-8
+:lang: fr
+:toc:
+:toc-title: Table des matières
+:toc-placement!:
+:sectanchors:
+:numbered:
+:experimental:
+:icons: font
+:toc:
+
++++<a href="https://github.com/formations/vaadin-foundations"><img style="position: fixed; top: 0; right: 0; border: 0;" target="_blank" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>+++
+
+include::../common/license.adoc[]
+
+toc::[]
+
+== Installation du _plugin_ dans l'IDE
+
+Consulter la documentation :
+
+* https://vaadin.com/docs/v10/designer/getting-started/designer-installing-eclipse.html[Pour Eclipse^]
+* https://vaadin.com/docs/v10/designer/getting-started/designer-installing-idea.html[Pour IntelliJ IDEA^]
+
+== Exploration des composants
+
+* Créer un projet Vaadin _vaadin-components_
+* Créer une classe qui hérite de `VerticalLayout`
+* A l’aide du sampler, ajouter les composants suivantes au _layout_ :
+. `Text`
+. `Span`
+. `TextField`
+. `DatePicker`
+. `Grid`
+. `Button`
+* A quoi correspond le premier argument du constructeur dans les types `TextField` et `DatePicker`?
+* A l’aide du navigateur, identifier les éléments HTML correspondants
+
+TIP: Pour afficher le _layout_ et ses composants, annoter la class avec `@Route("")` 
+
+== Exploration des _layouts_
+
+* En conservant le même projet, changer le `VerticalLayout` en :
+** `HorizontalLayout`
+** `FormLayout`
+* Qu’observez-vous ?
+* A l’aide du navigateur, identifier les éléments HTML correspondants
+
+== Création de formulaire 
+
+* Créer un projet Vaadin _vaadin-form_
+* Créer le formulaire suivant :
++
+[options="header,autowidth"]
+|===
+
+| Libellé | Type de données
+
+| Nom
+| Chaîne de caractères
+
+| Prénom
+| Chaîne de caractères
+
+| Date de Naissance
+| Date
+
+| Nationalité
+| Liste multi-valuée
+
+| Commune d’Origine
+| Chaîne de Caractères
+
+| S’enregistrer
+| Bouton
+
+|===
+
+== Envoi du formulaire
+
+Récupérer les valeurs des champs du formulaire côté serveur avec `myComponent.getValue()`
+
+== Gestion de l'envoi des évènements côté serveur
+
+* Valider les champs de deux manières différentes :
+. A la soumission du formulaire 
+. Chaque fois qu’un champ est modifié
+* Vérifier à l’aide des outils de développement du navigateur comment Vaadin gères les requêtes HTTP
+
+== Architecture
+
+Modifier le code précédemment écrit pour avoir un code orienté objet, notamment en mettant en œuvre le Principe de Responsabilité Unique
+
+== Bus de données
+
+Modifier le code précédemment écrit en introduisant un bus d'évènement (par exemple, Google Guava).
+
+== Gestion des erreurs
+
+* Reprendre le link:#_gestion_de_l_envoi_des_évènements_côté_serveur[point ci-dessus] en mettant en évidence les champs en erreur
+* Lancer une exception explicitement au clic d’un bouton.
+Que se passe-t-il ?
+* Ajouter un composant dédié chargé de traiter les erreurs de ce type en les affichant
+* Remplacer le composant par des notifications adaptées
+
+== Validation
+
+* Dupliquer le projet _vaadin-form_
+* Implémenter la validation précédente via la fonctionnalité de validation du _framework_
+
+== Modèle
+
+Remplacer les différents champs découplés par un modèle que vous aurez conçu
+
+== Grid
+
+Cette section permet de s'exercer à la manipulation de `Grid`.
+
+Soit la classe suivante :
+
+[source,java]
+----
+public class Person {
+
+    private String firstName;
+    private String lastName;
+    private LocalDate birthDate;
+    
+    // Getters and setters    
+}
+----
+
+=== Données en dur
+
+* Créer une liste d'objets `Person` "en dur".
+* Les afficher dans un composant `Grid`.
+* Afficher le libellé des colonnes en français, par exemple "Nom", "Prénom" et "Date de naissance".
+* Modifier le format des cellules de date pour afficher une date comme "18 Novembre 1970".
+* Créer une colonne supplémentaire qui affiche un bouton pour supprimer l'élément.
+
+=== Données en base de données
+
+Modifier le code pour lire les données depuis une table `PERSON` préalablement initialisée d'une base de données.
+
+TIP: Utiliser la source de données par défaut du serveur d'application TomEE.
+
+=== JPA
+
+Modifier le code pour utiliser l'API JPA.
+
+TIP: Injecter l'objet `EntityManager`.
