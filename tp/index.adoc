@@ -25,18 +25,29 @@ Consulter la documentation :
 * https://vaadin.com/docs/v10/designer/getting-started/designer-installing-eclipse.html[Pour Eclipse^]
 * https://vaadin.com/docs/v10/designer/getting-started/designer-installing-idea.html[Pour IntelliJ IDEA^]
 
+== Créer un projet Vaadin
+
+Les instructions pour créer un projet Vaadin à l'aide d'un _template_ sont disponibles https://vaadin.com/start/latest[ici^].
+
+Utiliser :
+
+* soit l'archétype Maven
+* soit en téléchargeant l'archive ZIP
+
+TIP: Il est conseillé d'utiliser la pile technologique "Plain Java Servlet" jusqu'à la section link:#_jpa[JPA]
+
 == Exploration des composants
 
 * Créer un projet Vaadin _vaadin-components_
 * Créer une classe qui hérite de `VerticalLayout`
 * A l’aide du sampler, ajouter les composants suivantes au _layout_ :
 . `Text`
-. `Span`
 . `TextField`
 . `DatePicker`
 . `Grid`
 . `Button`
-* A quoi correspond le premier argument du constructeur dans les types `TextField` et `DatePicker`?
+* Les types `TextField` et `DatePicker` ont un constructeur qui prend un `String` en premier parameètre.
+A quoi correspond-il?
 * A l’aide du navigateur, identifier les éléments HTML correspondants
 
 TIP: Pour afficher le _layout_ et ses composants, annoter la class avec `@Route("")` 
@@ -103,7 +114,7 @@ Modifier le code précédemment écrit en introduisant un bus d'évènement (par
 * Reprendre le link:#_gestion_de_l_envoi_des_évènements_côté_serveur[point ci-dessus] en mettant en évidence les champs en erreur
 * Lancer une exception explicitement au clic d’un bouton.
 Que se passe-t-il ?
-* Ajouter un composant dédié chargé de traiter les erreurs de ce type en les affichant
+* Ajouter un composant dédié chargé de traiter les erreurs de ce type en les affichant sur l'interface utilisateur
 * Remplacer le composant par des notifications adaptées
 
 == Validation
